@@ -66,7 +66,7 @@ module RubyLsp
           arguments: [
             @path,
             task_name,
-            "rake #{task_name}",
+            "bundle exec rake #{task_name}",
             {
               start_line: node.location.start_line - 1,
               start_column: node.location.start_column,

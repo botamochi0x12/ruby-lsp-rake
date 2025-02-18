@@ -22,9 +22,9 @@ module RubyLsp
 
         assert_equal(2, response.size)
         assert_equal("▶ Run In Terminal", response[0].command.title)
-        assert_equal("rake aaa", response[0].command.arguments[2])
+        assert_equal("bundle exec rake aaa", response[0].command.arguments[2])
         assert_equal("▶ Run In Terminal", response[1].command.title)
-        assert_equal("rake bbb:ccc", response[1].command.arguments[2])
+        assert_equal("bundle exec rake bbb:ccc", response[1].command.arguments[2])
       end
 
       def generate_code_lens_for_source(source, file: "/fake.rb") # rubocop:disable Metrics/MethodLength
