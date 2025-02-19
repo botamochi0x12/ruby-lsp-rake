@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+    name: "Ruby version: ${{ matrix.ruby }}"
     strategy:
       matrix:
         ruby:
@@ -34,20 +34,20 @@ jobs:
 
   test-with-ruby-lsp-latest:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
-    strategy:
-      matrix:
-        ruby:
-          - 'ruby' # Latest MRI
+    name: Ruby latest with ruby-lsp latest
 
     steps:
       - uses: actions/checkout@v4
       - name: Remove Gemfile.lock
         run: rm Gemfile.lock
+      - name: Replace ruby-lsp version specifier
+        env:
+          new_version_specifier: "0.23.11" # TODO: Replace
+        run: sed 's/ruby-lsp", "~> 0.23.0"/ruby-lsp", ${{new_version_specifier}}/' ruby-lsp-rake.gemspec # FIXME: Replace
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby }}
+          ruby-version: ruby
           bundler-cache: true
       - name: Run the default task
         run: bundle exec rake
