@@ -31,3 +31,23 @@ jobs:
           bundler-cache: true
       - name: Run the default task
         run: bundle exec rake
+
+  test-with-ruby-lsp-latest:
+    runs-on: ubuntu-latest
+    name: Ruby ${{ matrix.ruby }}
+    strategy:
+      matrix:
+        ruby:
+          - 'ruby' # Latest MRI
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove Gemfile.lock
+        run: rm Gemfile.lock
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run the default task
+        run: bundle exec rake
