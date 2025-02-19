@@ -17,7 +17,8 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - '3.3.5'
+          - '3.3.5' # Initially supported MRI version
+          - 'ruby' # Latest MRI
 
     steps:
       - uses: actions/checkout@v4
