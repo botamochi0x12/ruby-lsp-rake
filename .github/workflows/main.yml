@@ -42,7 +42,6 @@ jobs:
         run: rm Gemfile.lock
       - run: |-
           ORIGINAL_VERSION=$(grep 'gem "ruby-lsp"' ruby-lsp-rake.gemspec | awk -F '"' '{print $4}')
-          ; 
           echo "ORIGINAL_VERSION=${ORIGINAL_VERSION}" | tee --append $GITHUB_ENV
       - name: Replace ruby-lsp version specifier
         run: |-
