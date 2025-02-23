@@ -40,10 +40,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Remove Gemfile.lock
         run: rm Gemfile.lock
+      - run: |-
+          ORIGINAL_VERSION=$(grep 'gem "ruby-lsp"' ruby-lsp-rake.gemspec | awk -F '"' '{print $4}')
+          ; 
+          echo "ORIGINAL_VERSION=${ORIGINAL_VERSION}" | tee --append $GITHUB_ENV
       - name: Replace ruby-lsp version specifier
         run: |-
-          ORIGINAL_VERSION=$(grep 'gem "ruby-lsp"' ruby-lsp-rake.gemspec | awk -F '"' '{print $4}')
-          cat ruby-lsp-rake.gemspec | sed 's/ruby-lsp", "~> ＄{ORIGINAL_VERSION}"/ruby-lsp"/' | tee ruby-lsp-rake.gemspec
+          cat ruby-lsp-rake.gemspec | sed 's/ruby-lsp", "~> ${ORIGINAL_VERSION}"/ruby-lsp"/' | tee ruby-lsp-rake.gemspec
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
