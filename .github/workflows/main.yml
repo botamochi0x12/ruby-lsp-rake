@@ -41,7 +41,9 @@ jobs:
       - name: Remove Gemfile.lock
         run: rm Gemfile.lock
       - name: Replace ruby-lsp version specifier
-        run: cat ruby-lsp-rake.gemspec | sed 's/ruby-lsp", "~> 0.23.0"/ruby-lsp", "~> 0.23.11"/' | tee ruby-lsp-rake.gemspec # FIXME: Replace
+        run: |-
+          ORIGINAL_VERSION=$(grep 'gem "ruby-lsp"' ruby-lsp-rake.gemspec | awk -F '"' '{print $4}')
+          cat ruby-lsp-rake.gemspec | sed 's/ruby-lsp", "~> ＄{ORIGINAL_VERSION}"/ruby-lsp"/' | tee ruby-lsp-rake.gemspec
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
