@@ -3,7 +3,7 @@ name: Ruby
 on:
   push:
     branches:
-      - master
+      - main
 
   pull_request:
 
@@ -19,7 +19,10 @@ jobs:
     strategy:
       matrix:
         ruby:
+          - '3.2.8'
           - '3.3.5' # Initially supported MRI version
+          - '3.3.8'
+          - '3.4.4'
           - 'ruby' # Latest MRI
 
     steps:
