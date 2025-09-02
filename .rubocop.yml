@@ -1,6 +1,10 @@
 AllCops:
   TargetRubyVersion: 3.0
   NewCops: disable
+  SuggestExtensions: false
+
+Style/Documentation:
+  Enabled: false
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
@@ -11,3 +15,12 @@ Style/StringLiteralsInInterpolation:
 Naming/FileName:
   Exclude:
   - "lib/ruby-lsp-rake.rb"
+
+Layout/LeadingCommentSpace:
+  Enabled: false
+
+Layout/LineLength:
+  Enabled: false
+
+plugins:
+  - rubocop-oneoff_codemod

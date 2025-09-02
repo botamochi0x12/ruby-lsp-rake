@@ -3,22 +3,21 @@
 
 module RubyLsp
   module Rake
-    class IndexingEnhancement < RubyIndexer::Enhancement # rubocop:disable Style/Documentation
-      extend T::Sig
-
-      sig { params(listener: RubyIndexer::DeclarationListener).void }
+    class IndexingEnhancement < RubyIndexer::Enhancement
+      #: (RubyIndexer::DeclarationListener listener) -> void
       def initialize(listener)
         super(listener)
         @namespace_stack = []
         @last_desc = nil
       end
 
-      sig { override.params(node: Prism::CallNode).void }
+      # @override
+      #: (Prism::CallNode node) -> void
       def on_call_node_enter(node) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
         @last_desc = nil unless node.name == :task
 
         return unless @listener.current_owner.nil?
-        return unless node.name == :task || node.name == :desc || node.name == :namespace
+        return unless %i[task desc namespace].include? node.name
 
         arguments = node.arguments&.arguments
         return unless arguments
@@ -58,7 +57,7 @@ module RubyLsp
         ary = [*@namespace_stack, name]
         (1..(ary.size)).each do |i|
           @listener.add_method(
-            "task:#{ary[-i..].join(":")}",
+            "task:#{ary[-i..]&.join(":")}",
             node.location,
             [],
             comments: @last_desc
@@ -68,7 +67,8 @@ module RubyLsp
         @last_desc = nil
       end
 
-      sig { override.params(node: Prism::CallNode).void }
+      # @override
+      #: (Prism::CallNode node) -> void
       def on_call_node_leave(node)
         return unless @listener.current_owner.nil?
         return unless node.name == :namespace

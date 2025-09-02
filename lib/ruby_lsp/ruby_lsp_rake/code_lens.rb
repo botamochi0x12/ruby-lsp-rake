@@ -3,29 +3,22 @@
 
 module RubyLsp
   module Rake
-    class CodeLens # rubocop:disable Style/Documentation
-      extend T::Sig
+    class CodeLens
       include Requests::Support::Common
 
-      sig do
-        params(
-          response_builder: ResponseBuilders::CollectionResponseBuilder[Interface::CodeLens],
-          uri: URI::Generic,
-          dispatcher: Prism::Dispatcher
-        ).void
-      end
+      #: (ResponseBuilders::CollectionResponseBuilder response_builder, URI::Generic uri, Prism::Dispatcher dispatcher) -> void
       def initialize(response_builder, uri, dispatcher)
         @response_builder = response_builder
-        @path = T.let(T.unsafe(uri).to_standardized_path, T.nilable(String))
+        @path = uri.to_standardized_path
         @namespace_stack = []
 
         dispatcher.register(self, :on_call_node_enter, :on_call_node_leave)
       end
 
-      sig { params(node: Prism::CallNode).void }
+      #: (Prism::CallNode node) -> void
       def on_call_node_enter(node) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
         return unless node.receiver.nil?
-        return unless node.name == :task || node.name == :namespace
+        return unless %i[task namespace].include? node.name
 
         arguments = node.arguments&.arguments
         return unless arguments
@@ -78,7 +71,7 @@ module RubyLsp
         )
       end
 
-      sig { params(node: Prism::CallNode).void }
+      #: (Prism::CallNode node) -> void
       def on_call_node_leave(node)
         return unless node.name == :namespace
 
